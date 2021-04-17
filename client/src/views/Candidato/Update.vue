@@ -6,14 +6,14 @@
       @click="backPage"
       class="fas fa-arrow-left position-absolute arrow-left"
     ></i>
-    <h1 class="text-center text-light">Atualizar Candidato</h1>
+    <h1 class="text-center text-light mb-5">Atualizar Candidato</h1>
     <form @submit.prevent="editaCandidato(id)">
       <div class="row mt-3">
         <div class="col-md-9">
           <label>Nome</label>
           <input v-model="nome" type="text" />
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 position-relative">
           <label>CEP</label>
           <input v-model="cep" v-mask="'#####-###'"/>
         </div>
@@ -77,7 +77,7 @@
         </b-form-checkbox-group>
       </b-form-group>
 
-      <button class="btn btn-success my-3" type="submit">
+      <button class="btn btn-primary my-3" type="submit">
         <i class="far fa-edit mr-2"></i>Salvar alterações
       </button>
     </form>
@@ -143,6 +143,17 @@ export default {
         });
     },
   },
+  watch: {
+    cep(){
+      if(this.cep.length === 9){
+        http.get(`https://viacep.com.br/ws/${this.cep}/json/`).then(res =>{
+          this.endereco = res.data
+        }).catch(() =>{
+          this.endereco = {}
+        })
+      }
+    }
+  }
 };
 </script>
 
@@ -177,6 +188,10 @@ textarea:focus {
 label {
   font-size: 1.5rem;
   color: #f8f9fa;
+}
+
+.btn{
+  font-size: 1.2rem;
 }
 
 .readonly input {

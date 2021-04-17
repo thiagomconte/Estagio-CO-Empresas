@@ -12,7 +12,7 @@
 }
 
 body{
-  background-color:#132c33;
+  background-color:#121212;
 }
 
 a{

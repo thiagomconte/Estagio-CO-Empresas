@@ -85,10 +85,52 @@
                 <input v-model="cep" type="tel" v-mask="'#####-###'" />
               </div>
             </div>
-            <label class="mt-4">Selecione as vagas que deseja alocar este candidato:</label>
-            <b-form-group
-              v-slot="{ ariaDescribedby }"
+            <div class="row readonly mt-3">
+              <div class="col-md-7">
+                <label>Logradouro</label>
+                <input v-model="endereco.logradouro" type="text" readonly />
+              </div>
+              <div class="col-md-5">
+                <label>Complemento</label>
+                <input v-model="endereco.complemento" type="text" readonly />
+              </div>
+            </div>
+            <div class="row readonly mt-3">
+              <div class="col-md-7">
+                <label>Bairro</label>
+                <input v-model="endereco.bairro" type="text" readonly />
+              </div>
+              <div class="col-md-5">
+                <label>Localidade</label>
+                <input v-model="endereco.localidade" type="text" readonly />
+              </div>
+            </div>
+            <div class="row readonly mt-3">
+              <div class="col-md-2">
+                <label>UF</label>
+                <input v-model="endereco.uf" type="text" readonly />
+              </div>
+              <div class="col-md-3">
+                <label>IBGE</label>
+                <input v-model="endereco.ibge" type="text" readonly />
+              </div>
+              <div class="col-md-2">
+                <label>GIA</label>
+                <input v-model="endereco.gia" type="text" readonly />
+              </div>
+              <div class="col-md-2">
+                <label>DDD</label>
+                <input v-model="endereco.ddd" type="text" readonly />
+              </div>
+              <div class="col-md-3">
+                <label>SIAFI</label>
+                <input v-model="endereco.siafi" type="text" readonly />
+              </div>
+            </div>
+            <label class="mt-4"
+              >Selecione as vagas que deseja alocar este candidato:</label
             >
+            <b-form-group v-slot="{ ariaDescribedby }">
               <b-form-checkbox-group
                 v-model="selected"
                 :aria-describedby="ariaDescribedby"
@@ -120,7 +162,8 @@ export default {
       candidatos: [],
       vagas: [],
       selected: [],
-      tabIndex: 0
+      endereco: {},
+      tabIndex: 0,
     };
   },
   created() {
@@ -151,7 +194,10 @@ export default {
         })
         .then((res) => {
           this.candidatos.push(res.data);
-          this.$vToastify.success("Candidato cadastrado com sucesso", "Sucesso");
+          this.$vToastify.success(
+            "Candidato cadastrado com sucesso",
+            "Sucesso"
+          );
           this.tabIndex = 0;
           this.resetForm();
         })
@@ -173,10 +219,24 @@ export default {
     backPage() {
       this.$router.push("/");
     },
-    resetForm(){
+    resetForm() {
       this.nome = "";
       this.cep = "";
-    }
+    },
+  },
+  watch: {
+    cep() {
+      if (this.cep.length === 9) {
+        http
+          .get(`https://viacep.com.br/ws/${this.cep}/json/`)
+          .then((res) => {
+            this.endereco = res.data;
+          })
+          .catch(() => {
+            this.endereco = {};
+          });
+      }
+    },
   },
 };
 </script>
@@ -223,5 +283,9 @@ label {
   color: #f8f9fa;
   font-size: 2rem;
   cursor: pointer;
+}
+
+.readonly input {
+  background: silver;
 }
 </style>

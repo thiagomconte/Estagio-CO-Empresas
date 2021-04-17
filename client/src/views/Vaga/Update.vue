@@ -16,7 +16,7 @@
         <label>Descrição</label>
         <textarea v-model="descricao" rows="5"></textarea>
       </div>
-      <button class="btn btn-success mt-3" type="submit">
+      <button class="btn btn-primary mt-3" type="submit">
         <i class="far fa-edit mr-2"></i>Salvar alterações
       </button>
     </form>
@@ -99,5 +99,9 @@ textarea:focus {
 label {
   font-size: 1.3rem;
   color: #f8f9fa;
+}
+
+.btn{
+  font-size: 1.2rem;
 }
 </style>

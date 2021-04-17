@@ -35,6 +35,7 @@ export default {
   border-radius: 0.3rem;
   padding: 1rem;
   background: #252525;
+  border: none;
 }
 
 .home {
