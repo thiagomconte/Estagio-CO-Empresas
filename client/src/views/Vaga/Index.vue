@@ -1,0 +1,171 @@
+<template>
+  <div class="vaga-home position-relative">
+    <i
+      v-b-tooltip.hover
+      title="Voltar"
+      @click="backPage"
+      class="fas fa-arrow-left position-absolute arrow-left"
+    ></i>
+    <h1 class="text-center text-light d-block">Gerenciamento de vagas</h1>
+    <b-tabs content-class="mt-3" class="tab mb-5">
+      <b-tab title="Vagas" class="container" active>
+        <table class="table table-light table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Cargo</th>
+              <th scope="col">Descricao</th>
+              <th scope="col">Editar</th>
+              <th scope="col">Remover</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-if="!vagas">
+              <td>Nenhuma vaga cadastrada</td>
+            </tr>
+            <tr v-else v-for="(vaga, index) in vagas" :key="vaga._id">
+              <td>{{ vaga.cargo }}</td>
+              <td>{{ vaga.descricao }}</td>
+              <td>
+                <router-link
+                  :to="{ path: '/vaga/editar', query: { vaga: vaga._id } }"
+                  class="btn btn-sm btn-primary"
+                >
+                  <i
+                    class="far fa-edit"
+                    v-b-tooltip.hover
+                    title="Editar vaga"
+                  ></i>
+                </router-link>
+              </td>
+              <td>
+                <button
+                  @click="deletaVaga(vaga._id, index)"
+                  class="btn btn-sm btn-danger"
+                >
+                  <i
+                    class="far fa-trash-alt"
+                    v-b-tooltip.hover
+                    title="Deletar vaga"
+                  ></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </b-tab>
+      <b-tab title="Adicionar vaga" class="container">
+        <form @submit.prevent="criaVaga">
+          <div class="input-field">
+            <label>Cargo</label>
+            <input v-model="cargo" type="text" />
+          </div>
+          <div class="input-field mt-4">
+            <label>Descrição</label>
+            <textarea v-model="descricao" rows="5"></textarea>
+          </div>
+          <button class="btn btn-success mt-3" type="submit">
+            <i class="far fa-plus-square mr-2"></i>Adicionar vaga
+          </button>
+        </form>
+      </b-tab>
+    </b-tabs>
+  </div>
+</template>
+
+<script>
+import { http } from "../../config/axios_config";
+export default {
+  data() {
+    return {
+      cargo: "",
+      descricao: "",
+      vagas: [],
+    };
+  },
+  created() {
+    http
+      .get("vaga")
+      .then((res) => {
+        this.vagas = res.data;
+      })
+      .catch((err) => {
+        console.log(err?.response?.data);
+      });
+  },
+  methods: {
+    criaVaga() {
+      http
+        .post("vaga", {
+          cargo: this.cargo,
+          descricao: this.descricao,
+        })
+        .then(() => {
+          this.$router.go();
+        })
+        .catch((err) => {
+          alert(err?.response?.data);
+        });
+    },
+    deletaVaga(id, index) {
+      http
+        .delete(`vaga/${id}`)
+        .then((res) => {
+          this.vagas.splice(index, 1);
+          console.log(res.data);
+          this.$router.go();
+        })
+        .catch((err) => {
+          alert(err?.response?.data);
+        });
+    },
+    backPage() {
+      this.$router.push("/");
+    },
+  },
+};
+</script>
+
+<style>
+.tab {
+  color: #f8f9fa;
+}
+
+.nav-tabs .nav-link {
+  color: #f8f9fa !important;
+}
+
+.nav-tabs .nav-link:focus,
+.nav-link.active {
+  color: #121212 !important;
+}
+
+.input-field {
+  display: relative;
+  width: 100%;
+}
+
+input,
+textarea {
+  width: 100%;
+  font-size: 1.5rem;
+  padding-left: 0.5rem;
+  border-radius: 0.3rem;
+  border: none;
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+}
+
+label {
+  font-size: 1.5rem;
+}
+.arrow-left {
+  top: 0;
+  left: 0px;
+  color: #f8f9fa;
+  font-size: 2rem;
+  cursor: pointer;
+}
+</style>
