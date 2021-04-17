@@ -38,28 +38,6 @@
           <input v-model="endereco.localidade" type="text" readonly />
         </div>
       </div>
-      <div class="row readonly mt-3">
-        <div class="col-md-2">
-          <label>UF</label>
-          <input v-model="endereco.uf" type="text" readonly />
-        </div>
-        <div class="col-md-3">
-          <label>IBGE</label>
-          <input v-model="endereco.ibge" type="text" readonly />
-        </div>
-        <div class="col-md-2">
-          <label>GIA</label>
-          <input v-model="endereco.gia" type="text" readonly />
-        </div>
-        <div class="col-md-2">
-          <label>DDD</label>
-          <input v-model="endereco.ddd" type="text" readonly />
-        </div>
-        <div class="col-md-3">
-          <label>SIAFI</label>
-          <input v-model="endereco.siafi" type="text" readonly />
-        </div>
-      </div>
       <label class="mt-4">Vagas:</label>
       <b-form-group
         class="text-light checkbox-group"
