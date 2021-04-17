@@ -1,5 +1,5 @@
 <template>
-  <div class="edit-Candidato position-relative">
+  <div class="edit-Candidato position-relative mb-5">
     <i
       v-b-tooltip.hover
       title="Voltar"
@@ -60,7 +60,21 @@
           <input v-model="endereco.siafi" type="text" readonly />
         </div>
       </div>
-      <button class="btn btn-success mt-3" type="submit">
+      <label class="mt-4">Vagas:</label>
+      <b-form-group class="text-light checkbox-group" v-slot="{ ariaDescribedby }">
+        <b-form-checkbox-group
+          v-model="selected"
+          :aria-describedby="ariaDescribedby"
+        >
+          <div v-for="vaga in vagas" :key="vaga._id">
+            <b-form-checkbox :value="vaga._id">{{
+              vaga.cargo
+            }}</b-form-checkbox>
+          </div>
+        </b-form-checkbox-group>
+      </b-form-group>
+
+      <button class="btn btn-success my-3" type="submit">
         <i class="far fa-edit mr-2"></i>Salvar alterações
       </button>
     </form>
@@ -75,6 +89,7 @@ export default {
       id: "",
       nome: "",
       cep: "",
+      selected: [],
       endereco: {},
       vagas: [],
     };
@@ -87,6 +102,7 @@ export default {
         this.nome = res.data.nome;
         this.cep = res.data.cep;
         this.endereco = res.data.endereco;
+        res.data.vaga_id.map( vaga => this.selected.push(vaga._id))
       })
       .catch((err) => {
         alert(err?.response?.data);
@@ -109,6 +125,7 @@ export default {
         .put(`candidato/${id}`, {
           nome: this.nome,
           cep: this.cep,
+          vaga_id: this.selected
         })
         .then((res) => {
           this.$router.push("/candidato", () => {
@@ -158,5 +175,9 @@ label {
 
 .readonly input {
   background: silver;
+}
+
+.checkbox-group{
+  font-size:1.2rem;
 }
 </style>

@@ -53,7 +53,7 @@ router.get("/", async (req, res) => {
  */
 router.get("/:id", async (req, res) => {
   try {
-    const candidato = await Candidato.findById(req.params.id);
+    const candidato = await Candidato.findById(req.params.id).populate('vaga_id');
     if (!candidato) return res.status(404).json("Candidato não foi encontrado");
     return res.json(candidato);
   } catch (error) {
@@ -98,6 +98,7 @@ router.put("/:id", candidatoVal, async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     await Candidato.findByIdAndDelete(req.params.id);
+    return res.json("Candidato foi removido com sucesso");
   } catch (error) {
     return res
       .status(400)

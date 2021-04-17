@@ -14,4 +14,13 @@
 body{
   background-color:#132c33;
 }
+
+a{
+  color: #f8f9fa !important;
+}
+
+a:focus, a.active{
+  color: #252525 !important;
+}
+
 </style>

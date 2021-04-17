@@ -74,6 +74,7 @@ router.put("/:id", vagaVal, async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     await Vaga.findByIdAndDelete(req.params.id);
+    return res.json("Vaga foi removida com sucesso");
   } catch (error) {
     return res.status(400).json("Não foi possível remover a vaga selecionada");
   }

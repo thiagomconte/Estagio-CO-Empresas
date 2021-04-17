@@ -82,9 +82,23 @@
               </div>
               <div class="col-md-3">
                 <label>CEP</label>
-                <input v-model="cep" />
+                <input v-model="cep" type="tel" v-mask="'#####-###'" />
               </div>
             </div>
+            <b-form-group
+              class="mt-4"
+              label="Vagas:"
+              v-slot="{ ariaDescribedby }"
+            >
+              <b-form-checkbox-group
+                v-model="selected"
+                :aria-describedby="ariaDescribedby"
+              >
+                <div v-for="vaga in vagas" :key="vaga._id">
+                  <b-form-checkbox :value="vaga._id">{{vaga.cargo}}</b-form-checkbox>
+                </div>
+              </b-form-checkbox-group>
+            </b-form-group>
             <button class="btn btn-success mt-3" type="submit">
               <i class="far fa-plus-square mr-2"></i>Adicionar candidato
             </button>
@@ -103,6 +117,8 @@ export default {
       nome: "",
       cep: "",
       candidatos: [],
+      vagas: [],
+      selected: [],
     };
   },
   created() {
@@ -114,6 +130,14 @@ export default {
       .catch((err) => {
         console.log(err?.response?.data);
       });
+    http
+      .get("vaga")
+      .then((res) => {
+        this.vagas = res.data;
+      })
+      .catch((err) => {
+        console.log(err?.response?.data);
+      });
   },
   methods: {
     criaCandidato() {
@@ -121,6 +145,7 @@ export default {
         .post("candidato", {
           nome: this.nome,
           cep: this.cep,
+          vaga_id: this.selected
         })
         .then(() => {
           this.$router.go();
@@ -132,10 +157,8 @@ export default {
     deletaCandidato(id, index) {
       http
         .delete(`candidato/${id}`)
-        .then((res) => {
+        .then(() => {
           this.candidatos.splice(index, 1);
-          console.log(res.data);
-          this.$router.go();
         })
         .catch((err) => {
           alert(err?.response?.data);
@@ -148,7 +171,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .tab {
   color: #f8f9fa;
 }
@@ -173,6 +196,7 @@ input {
   padding-left: 0.5rem;
   border-radius: 0.3rem;
   border: none;
+  height: 2.2rem;
 }
 
 input:focus,
@@ -190,4 +214,5 @@ label {
   font-size: 2rem;
   cursor: pointer;
 }
+
 </style>

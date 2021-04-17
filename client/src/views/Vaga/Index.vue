@@ -109,10 +109,8 @@ export default {
     deletaVaga(id, index) {
       http
         .delete(`vaga/${id}`)
-        .then((res) => {
+        .then(() => {
           this.vagas.splice(index, 1);
-          console.log(res.data);
-          this.$router.go();
         })
         .catch((err) => {
           alert(err?.response?.data);
@@ -125,7 +123,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .tab {
   color: #f8f9fa;
 }
@@ -144,10 +142,14 @@ export default {
   width: 100%;
 }
 
+input{
+  height:2.2rem;
+}
+
 input,
 textarea {
   width: 100%;
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   padding-left: 0.5rem;
   border-radius: 0.3rem;
   border: none;

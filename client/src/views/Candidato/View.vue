@@ -1,69 +1,75 @@
 <template>
-  <div class="edit-Candidato position-relative">
+  <div class="view-candidato position-relative">
     <i
       v-b-tooltip.hover
       title="Voltar"
       @click="backPage"
       class="fas fa-arrow-left position-absolute arrow-left"
     ></i>
-    <h1 class="text-center text-light">Atualizar Candidato</h1>
-    <form @submit.prevent="editaCandidato(id)">
-      <div class="row mt-3 readonly">
-        <div class="col-md-9">
-          <label>Nome</label>
-          <input v-model="nome" type="text" readonly/>
-        </div>
-        <div class="col-md-3">
-          <label>CEP</label>
-          <input v-model="cep" readonly/>
-        </div>
+    <h1 class="text-center text-light">Informações de {{nome}}</h1>
+    <button @click="backPage" class="btn btn-warning mt-3" type="submit">
+      Voltar
+    </button>
+    <div class="row mt-3 readonly">
+      <div class="col-md-9">
+        <label>Nome</label>
+        <input v-model="nome" type="text" readonly />
       </div>
-      <div class="row readonly mt-3">
-        <div class="col-md-7">
-          <label>Logradouro</label>
-          <input v-model="endereco.logradouro" type="text" readonly />
-        </div>
-        <div class="col-md-5">
-          <label>Complemento</label>
-          <input v-model="endereco.complemento" type="text" readonly />
-        </div>
+      <div class="col-md-3">
+        <label>CEP</label>
+        <input v-model="cep" readonly />
       </div>
-      <div class="row readonly mt-3">
-        <div class="col-md-7">
-          <label>Bairro</label>
-          <input v-model="endereco.bairro" type="text" readonly />
-        </div>
-        <div class="col-md-5">
-          <label>Localidade</label>
-          <input v-model="endereco.localidade" type="text" readonly />
-        </div>
+    </div>
+    <div class="row readonly mt-3">
+      <div class="col-md-7">
+        <label>Logradouro</label>
+        <input v-model="endereco.logradouro" type="text" readonly />
       </div>
-      <div class="row readonly mt-3">
-        <div class="col-md-2">
-          <label>UF</label>
-          <input v-model="endereco.uf" type="text" readonly />
-        </div>
-        <div class="col-md-3">
-          <label>IBGE</label>
-          <input v-model="endereco.ibge" type="text" readonly />
-        </div>
-        <div class="col-md-2">
-          <label>GIA</label>
-          <input v-model="endereco.gia" type="text" readonly />
-        </div>
-        <div class="col-md-2">
-          <label>DDD</label>
-          <input v-model="endereco.ddd" type="text" readonly />
-        </div>
-        <div class="col-md-3">
-          <label>SIAFI</label>
-          <input v-model="endereco.siafi" type="text" readonly />
-        </div>
+      <div class="col-md-5">
+        <label>Complemento</label>
+        <input v-model="endereco.complemento" type="text" readonly />
       </div>
-      <button @click="backPage" class="btn btn-warning mt-3" type="submit">
-        Voltar
-      </button>
-    </form>
+    </div>
+    <div class="row readonly mt-3">
+      <div class="col-md-7">
+        <label>Bairro</label>
+        <input v-model="endereco.bairro" type="text" readonly />
+      </div>
+      <div class="col-md-5">
+        <label>Localidade</label>
+        <input v-model="endereco.localidade" type="text" readonly />
+      </div>
+    </div>
+    <div class="row readonly mt-3">
+      <div class="col-md-2">
+        <label>UF</label>
+        <input v-model="endereco.uf" type="text" readonly />
+      </div>
+      <div class="col-md-3">
+        <label>IBGE</label>
+        <input v-model="endereco.ibge" type="text" readonly />
+      </div>
+      <div class="col-md-2">
+        <label>GIA</label>
+        <input v-model="endereco.gia" type="text" readonly />
+      </div>
+      <div class="col-md-2">
+        <label>DDD</label>
+        <input v-model="endereco.ddd" type="text" readonly />
+      </div>
+      <div class="col-md-3">
+        <label>SIAFI</label>
+        <input v-model="endereco.siafi" type="text" readonly />
+      </div>
+    </div>
+    <hr>
+    <h3 class="text-light text-center d-block">Vagas de {{nome}}:</h3>
+    <div class="list-vaga text-light my-5" v-for="vaga in vagas" :key="vaga._id">
+      <h4 class="d-block">{{vaga.cargo}}</h4>
+      <div class="descricao">
+        . {{vaga.descricao}}
+      </div>
+    </div>
   </div>
 </template>
 
@@ -87,14 +93,7 @@ export default {
         this.nome = res.data.nome;
         this.cep = res.data.cep;
         this.endereco = res.data.endereco;
-      })
-      .catch((err) => {
-        alert(err?.response?.data);
-      });
-    http
-      .get("vaga")
-      .then((res) => {
-        this.vagas = res.data;
+        this.vagas = res.data.vaga_id;
       })
       .catch((err) => {
         alert(err?.response?.data);
@@ -103,21 +102,6 @@ export default {
   methods: {
     backPage() {
       this.$router.push("/candidato");
-    },
-    editaCandidato(id) {
-      http
-        .put(`candidato/${id}`, {
-          nome: this.nome,
-          cep: this.cep,
-        })
-        .then((res) => {
-          this.$router.push("/candidato", () => {
-            alert(res.data);
-          });
-        })
-        .catch((err) => {
-          alert(err?.response?.data);
-        });
     },
   },
 };
@@ -152,11 +136,23 @@ textarea:focus {
 }
 
 label {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   color: #f8f9fa;
 }
 
 .readonly input {
   background: silver;
+}
+
+hr{
+  margin: 2rem auto;
+  border: 1px solid #f8f9fa;
+}
+
+.list-vaga{
+
+  border-radius: 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  padding: 1.2rem .7rem;
 }
 </style>
