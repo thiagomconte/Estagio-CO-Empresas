@@ -57,11 +57,11 @@ export default {
         })
         .then((res) => {
           this.$router.push("/vaga", () => {
-            alert(res.data);
+            this.$vToastify.success(res.data, "Sucesso");
           });
         })
         .catch((err) => {
-          alert(err?.response?.data);
+          this.$vToastify.error(err?.response?.data, "Erro");
         });
     },
   },
@@ -85,7 +85,7 @@ export default {
 input,
 textarea {
   width: 100%;
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   padding-left: 0.5rem;
   border-radius: 0.3rem;
   border: none;
@@ -97,7 +97,7 @@ textarea:focus {
 }
 
 label {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   color: #f8f9fa;
 }
 </style>

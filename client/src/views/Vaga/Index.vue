@@ -6,8 +6,8 @@
       @click="backPage"
       class="fas fa-arrow-left position-absolute arrow-left"
     ></i>
-    <h1 class="text-center text-light d-block">Gerenciamento de vagas</h1>
-    <b-tabs content-class="mt-3" class="tab mb-5">
+    <h1 class="text-center text-light d-block mb-5">Gerenciamento de vagas</h1>
+    <b-tabs v-model="tabIndex" content-class="mt-3" class="tab mb-5">
       <b-tab title="Vagas" class="container" active>
         <table class="table table-light table-striped">
           <thead>
@@ -80,6 +80,7 @@ export default {
       cargo: "",
       descricao: "",
       vagas: [],
+      tabIndex: 0,
     };
   },
   created() {
@@ -89,7 +90,7 @@ export default {
         this.vagas = res.data;
       })
       .catch((err) => {
-        console.log(err?.response?.data);
+        this.$vToastify.error(err?.response?.data, "Erro");
       });
   },
   methods: {
@@ -99,11 +100,14 @@ export default {
           cargo: this.cargo,
           descricao: this.descricao,
         })
-        .then(() => {
-          this.$router.go();
+        .then((res) => {
+          this.vagas.push(res.data);
+          this.$vToastify.success("Vaga foi criada com sucesso", "Sucesso");
+          this.tabIndex = 0;
+          this.resetForm();
         })
         .catch((err) => {
-          alert(err?.response?.data);
+          this.$vToastify.error(err?.response?.data, "Erro");
         });
     },
     deletaVaga(id, index) {
@@ -111,14 +115,19 @@ export default {
         .delete(`vaga/${id}`)
         .then(() => {
           this.vagas.splice(index, 1);
+          this.$vToastify.success("A vaga foi removida com sucesso", "Sucesso");
         })
         .catch((err) => {
-          alert(err?.response?.data);
+          this.$vToastify.error(err?.response?.data, "Erro");
         });
     },
     backPage() {
       this.$router.push("/");
     },
+    resetForm(){
+      this.cargo = "";
+      this.descricao = "";
+    }
   },
 };
 </script>
@@ -142,8 +151,8 @@ export default {
   width: 100%;
 }
 
-input{
-  height:2.2rem;
+input {
+  height: 2.2rem;
 }
 
 input,
@@ -161,7 +170,7 @@ textarea:focus {
 }
 
 label {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
 }
 .arrow-left {
   top: 0;

@@ -1,10 +1,10 @@
 <template>
   <div class="home">
     <h1 class="text-center text-light display-4">Bem-vindo Admin</h1>
-    <router-link to="/vaga" class="options">
+    <router-link to="/vaga" class="options text-center">
       Gerenciar Vagas<i class="fas fa-list-ul ml-3"></i>
     </router-link>
-    <router-link to="/candidato" class="options">
+    <router-link to="/candidato" class="options text-center">
       Gerenciar Candidatos<i class="fas fa-users ml-3"></i>
     </router-link>
   </div>
@@ -38,6 +38,6 @@ export default {
 }
 
 .home {
-  animation: 1s ease-out 0s 1 slideInFromLeft;
+  animation: .5s ease-out 0s 1 slideInFromLeft;
 }
 </style>

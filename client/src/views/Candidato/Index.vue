@@ -5,11 +5,11 @@
         @click="backPage"
         class="fas fa-arrow-left position-absolute arrow-left"
       ></i>
-      <h1 class="text-center text-light d-block">
+      <h1 class="text-center text-light d-block mb-5">
         Gerenciamento de candidatos
       </h1>
-      <b-tabs content-class="mt-3" class="tab mb-5">
-        <b-tab title="candidatos" class="container" active>
+      <b-tabs v-model="tabIndex" content-class="mt-3" class="tab mb-5">
+        <b-tab title="Candidatos" class="container" active>
           <table class="table table-light table-striped">
             <thead>
               <tr>
@@ -85,9 +85,8 @@
                 <input v-model="cep" type="tel" v-mask="'#####-###'" />
               </div>
             </div>
+            <label class="mt-4">Selecione as vagas que deseja alocar este candidato:</label>
             <b-form-group
-              class="mt-4"
-              label="Vagas:"
               v-slot="{ ariaDescribedby }"
             >
               <b-form-checkbox-group
@@ -95,7 +94,9 @@
                 :aria-describedby="ariaDescribedby"
               >
                 <div v-for="vaga in vagas" :key="vaga._id">
-                  <b-form-checkbox :value="vaga._id">{{vaga.cargo}}</b-form-checkbox>
+                  <b-form-checkbox :value="vaga._id">{{
+                    vaga.cargo
+                  }}</b-form-checkbox>
                 </div>
               </b-form-checkbox-group>
             </b-form-group>
@@ -119,6 +120,7 @@ export default {
       candidatos: [],
       vagas: [],
       selected: [],
+      tabIndex: 0
     };
   },
   created() {
@@ -145,13 +147,16 @@ export default {
         .post("candidato", {
           nome: this.nome,
           cep: this.cep,
-          vaga_id: this.selected
+          vaga_id: this.selected,
         })
-        .then(() => {
-          this.$router.go();
+        .then((res) => {
+          this.candidatos.push(res.data);
+          this.$vToastify.success("Candidato cadastrado com sucesso", "Sucesso");
+          this.tabIndex = 0;
+          this.resetForm();
         })
         .catch((err) => {
-          alert(err?.response?.data);
+          this.$vToastify.error(err?.response?.data, "Erro");
         });
     },
     deletaCandidato(id, index) {
@@ -159,14 +164,19 @@ export default {
         .delete(`candidato/${id}`)
         .then(() => {
           this.candidatos.splice(index, 1);
+          this.$vToastify.success("Candidato removido com sucesso", "Sucesso");
         })
         .catch((err) => {
-          alert(err?.response?.data);
+          this.$vToastify.error(err?.response?.data, "Erro");
         });
     },
     backPage() {
       this.$router.push("/");
     },
+    resetForm(){
+      this.nome = "";
+      this.cep = "";
+    }
   },
 };
 </script>
@@ -214,5 +224,4 @@ label {
   font-size: 2rem;
   cursor: pointer;
 }
-
 </style>

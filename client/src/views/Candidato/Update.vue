@@ -15,7 +15,7 @@
         </div>
         <div class="col-md-3">
           <label>CEP</label>
-          <input v-model="cep" />
+          <input v-model="cep" v-mask="'#####-###'"/>
         </div>
       </div>
       <div class="row readonly mt-3">
@@ -61,7 +61,10 @@
         </div>
       </div>
       <label class="mt-4">Vagas:</label>
-      <b-form-group class="text-light checkbox-group" v-slot="{ ariaDescribedby }">
+      <b-form-group
+        class="text-light checkbox-group"
+        v-slot="{ ariaDescribedby }"
+      >
         <b-form-checkbox-group
           v-model="selected"
           :aria-describedby="ariaDescribedby"
@@ -102,7 +105,7 @@ export default {
         this.nome = res.data.nome;
         this.cep = res.data.cep;
         this.endereco = res.data.endereco;
-        res.data.vaga_id.map( vaga => this.selected.push(vaga._id))
+        res.data.vaga_id.map((vaga) => this.selected.push(vaga._id));
       })
       .catch((err) => {
         alert(err?.response?.data);
@@ -125,15 +128,18 @@ export default {
         .put(`candidato/${id}`, {
           nome: this.nome,
           cep: this.cep,
-          vaga_id: this.selected
+          vaga_id: this.selected,
         })
         .then((res) => {
           this.$router.push("/candidato", () => {
-            alert(res.data);
+            this.$vToastify.success(
+              res.data,
+              "Sucesso"
+            );
           });
         })
         .catch((err) => {
-          alert(err?.response?.data);
+          this.$vToastify.error(err?.response?.data, "Erro");
         });
     },
   },
@@ -177,7 +183,7 @@ label {
   background: silver;
 }
 
-.checkbox-group{
-  font-size:1.2rem;
+.checkbox-group {
+  font-size: 1.2rem;
 }
 </style>

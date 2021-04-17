@@ -1,16 +1,26 @@
-import '@babel/polyfill'
-import 'mutationobserver-shim'
-import Vue from 'vue'
-import './plugins/bootstrap-vue'
-import App from './App.vue'
-import './registerServiceWorker'
-import router from './router'
-import VueTheMask from 'vue-the-mask'
-Vue.use(VueTheMask)
+import "@babel/polyfill";
+import "mutationobserver-shim";
+import Vue from "vue";
+import "./plugins/bootstrap-vue";
+import App from "./App.vue";
+import "./registerServiceWorker";
+import router from "./router";
+import routerLoadedWithRoutes from "./router";
+import VueTheMask from "vue-the-mask";
+import VueToastify from "vue-toastify";
 
-Vue.config.productionTip = false
+Vue.use(VueToastify);
+Vue.use(VueToastify, {
+  singular: false,
+  position: "top-right",
+  hideProgressbar: true,
+  errorDuration: 5000,
+}, routerLoadedWithRoutes);
+Vue.use(VueTheMask);
+
+Vue.config.productionTip = false;
 
 new Vue({
   router,
-  render: h => h(App)
-}).$mount('#app')
+  render: (h) => h(App),
+}).$mount("#app");

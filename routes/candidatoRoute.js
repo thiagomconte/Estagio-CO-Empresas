@@ -13,7 +13,7 @@ router.post("/", candidatoVal, async (req, res) => {
     fetch(`https://viacep.com.br/ws/${cep}/json/`)
       .then((res) => res.json())
       .then(async (address) => {
-        if (!address) return res.status(404).json("Endereço não encontrado.");
+        if (address['erro']) return res.status(404).json("Endereço não encontrado.");
         const candidato = new Candidato({
           nome,
           cep,
@@ -21,7 +21,7 @@ router.post("/", candidatoVal, async (req, res) => {
           vaga_id,
         });
         await candidato.save();
-        return res.json("Candidato cadastrado com sucesso");
+        return res.json(candidato);
       })
       .catch((err) => {
         return res.status(404).json("Endereço não encontrado");
@@ -73,6 +73,7 @@ router.put("/:id", candidatoVal, async (req, res) => {
     fetch(`https://viacep.com.br/ws/${cep}/json/`)
       .then((res) => res.json())
       .then(async (address) => {
+        if (address['erro']) return res.status(404).json("Endereço não encontrado.");
         await Candidato.findByIdAndUpdate(req.params.id, {
           $set: {
             nome,
