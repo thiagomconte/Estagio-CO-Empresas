@@ -1,1 +1,8 @@
-O projeto foi desenvolvido com Nodejs e Mongodb no back-end, e Vuejs para o front-end
+O projeto foi desenvolvido com Nodejs e Mongodb no back-end, e Vuejs para o front-end. Certifique-se de ter instalado em sua máquina o mongodb, ou pode utilizar o banco de dados online pelo site https://www.mongodb.com/.
+
+O projeto possui um arquivo .env onde está localizado a variável de ambiente MONGO_URI para conexão com banco, portanto é só altera-lá no arquivo.
+
+	-Primeiro passo agora é instalar as dependências do projeto, para isto através de um terminal, acesse a diretório raiz do projeto, onde se encontra o arquivo packageg.json e execute o seguinte comando "npm install" e aguarde a instalação. Agora já pode executar o comando "node server.js" para iniciar o servidor da aplicação.
+	-Próximo passo é instalar as dependências do Vuejs, pelo terminal também acesse o diretório client do projeto e execute o mesmo comando do primeiro passo. Após finalizada a instalação, execute o comando "npm run serve" para iniciar o vuejs. Agora é só acessar pelo browser a url informada pelo Vuejs no terminal e testar o projeto.
+
+Por padrão o servidor Node irá iniciar na porta 3000, caso queira trocar de porta, altere a variável PORT no arquivo .env.
