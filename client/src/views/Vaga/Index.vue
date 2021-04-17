@@ -19,8 +19,11 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-if="!vagas">
+            <tr v-if="isEmpty">
               <td>Nenhuma vaga cadastrada</td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr v-else v-for="(vaga, index) in vagas" :key="vaga._id">
               <td>{{ vaga.cargo }}</td>
@@ -79,7 +82,7 @@ export default {
     return {
       cargo: "",
       descricao: "",
-      vagas: [],
+      vagas: [{}],
       tabIndex: 0,
     };
   },
@@ -124,10 +127,18 @@ export default {
     backPage() {
       this.$router.push("/");
     },
-    resetForm(){
+    resetForm() {
       this.cargo = "";
       this.descricao = "";
-    }
+    },
+  },
+  computed: {
+    isEmpty() {
+      if (this.vagas.length > 0) {
+        return false;
+      }
+      return true;
+    },
   },
 };
 </script>

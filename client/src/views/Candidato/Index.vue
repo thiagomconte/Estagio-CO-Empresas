@@ -21,8 +21,12 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-if="!candidatos">
-                <td>Nenhuma candidato cadastrada</td>
+              <tr v-if="isCandidatoEmpty">
+                <td>Nenhuma candidato cadastrado</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
               </tr>
               <tr
                 v-else
@@ -105,32 +109,14 @@
                 <input v-model="endereco.localidade" type="text" readonly />
               </div>
             </div>
-            <div class="row readonly mt-3">
-              <div class="col-md-2">
-                <label>UF</label>
-                <input v-model="endereco.uf" type="text" readonly />
-              </div>
-              <div class="col-md-3">
-                <label>IBGE</label>
-                <input v-model="endereco.ibge" type="text" readonly />
-              </div>
-              <div class="col-md-2">
-                <label>GIA</label>
-                <input v-model="endereco.gia" type="text" readonly />
-              </div>
-              <div class="col-md-2">
-                <label>DDD</label>
-                <input v-model="endereco.ddd" type="text" readonly />
-              </div>
-              <div class="col-md-3">
-                <label>SIAFI</label>
-                <input v-model="endereco.siafi" type="text" readonly />
-              </div>
-            </div>
+            <hr class="mt-5">
             <label class="mt-4"
               >Selecione as vagas que deseja alocar este candidato:</label
             >
-            <b-form-group v-slot="{ ariaDescribedby }">
+            <p v-if="isVagasEmpty">
+              <i class="fas fa-times mr-2 text-danger"></i>Nenhuma vaga cadastrada. <router-link to="/vaga" class="cadastra">Cadastre</router-link> agora.
+            </p>
+            <b-form-group v-else v-slot="{ ariaDescribedby }">
               <b-form-checkbox-group
                 v-model="selected"
                 :aria-describedby="ariaDescribedby"
@@ -143,7 +129,7 @@
               </b-form-checkbox-group>
             </b-form-group>
             <button class="btn btn-success mt-3" type="submit">
-              <i class="far fa-plus-square mr-2"></i>Adicionar candidato
+              <i class="far fa-plus-square mr-2"></i>Cadastrar candidato
             </button>
           </form>
         </b-tab>
@@ -159,7 +145,7 @@ export default {
     return {
       nome: "",
       cep: "",
-      candidatos: [],
+      candidatos: [{}],
       vagas: [],
       selected: [],
       endereco: {},
@@ -238,6 +224,21 @@ export default {
       }
     },
   },
+  computed:{
+    isCandidatoEmpty() {
+      if(this.candidatos.length > 0) {
+        return false;
+      }
+      return true;
+    },
+    isVagasEmpty() {
+      if(this.vagas.length > 0) {
+        return false;
+      }
+      return true;
+    }
+    
+  }
 };
 </script>
 
@@ -287,5 +288,13 @@ label {
 
 .readonly input {
   background: silver;
+}
+
+.cadastra{
+  color: #007bff !important;
+}
+
+hr{
+  border: 1px solid #f8f9fa;
 }
 </style>

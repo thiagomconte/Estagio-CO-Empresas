@@ -9,12 +9,12 @@ import routerLoadedWithRoutes from "./router";
 import VueTheMask from "vue-the-mask";
 import VueToastify from "vue-toastify";
 
-Vue.use(VueToastify);
 Vue.use(VueToastify, {
   singular: false,
   position: "top-right",
   hideProgressbar: true,
-  errorDuration: 5000,
+  errorDuration: 2000,
+  successDuration: 2000
 }, routerLoadedWithRoutes);
 Vue.use(VueTheMask);
 
